@@ -17,12 +17,18 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.rowHeight = 120
+
+        setupUI()
         
         movieDataManager.makeMovieData()
         moviesArray = movieDataManager.getMovieData()
         
+    }
+    
+    func setupUI() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = 120
     }
 }
 
@@ -40,6 +46,25 @@ extension ViewController: UITableViewDataSource {
         cell.mainImageView.image = movie.movieImage
         cell.movieNameLabel.text = movie.movieName
         cell.descriptionLabel.text = movie.movieDescription
+        cell.selectionStyle = .none
         return cell
     }
+}
+
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "detailVC", sender: indexPath)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "detailVC" {
+            let detail = segue.destination as! DetailViewController
+            let movieDataArray = movieDataManager.getMovieData()
+            let indexPath = sender as! IndexPath
+            
+            
+            detail.movieData = movieDataArray[indexPath.row]
+        }
+    }
+    
 }
