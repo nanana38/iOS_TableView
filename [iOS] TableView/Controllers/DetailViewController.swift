@@ -21,7 +21,7 @@ class DetailViewController: UIViewController {
         setupUI()
         
     }
-    
+
     func setupUI() {
         mainImageView.image = movieData?.movieImage
         movieNameLabel.text = movieData?.movieName
